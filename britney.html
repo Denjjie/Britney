@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SMART MANGROVE EXPLORER | Panabo Mangrove Forest Park</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green-dark: #0d3b2e;
+      --green-mid: #1a5c45;
+      --green-light: #2d8a6a;
+      --accent: #f4a261;
+      --accent-soft: #e9c46a;
+      --cream: #f8f5f0;
+      --white: #ffffff;
+      --shadow: rgba(0, 0, 0, 0.35);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Source Sans 3', system-ui, sans-serif;
+      background: #0a1f18;
+      color: var(--cream);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    .nav-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(to bottom, rgba(13, 59, 46, 0.95), transparent);
+      pointer-events: none;
+    }
+
+    .nav-bar * {
+      pointer-events: auto;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent-soft);
+      letter-spacing: 0.5px;
+    }
+
+    .slide-counter {
+      font-size: 0.9rem;
+      font-weight: 600;
+      background: rgba(255,255,255,0.12);
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      backdrop-filter: blur(6px);
+    }
+
+    .presentation {
+      height: 100vh;
+      width: 100vw;
+      position: relative;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 4.5rem 5rem 5rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.55s ease, visibility 0.55s ease;
+      background-size: cover;
+      background-position: center;
+      overflow: hidden;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      z-index: 10;
+    }
+
+    .slide::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        135deg,
+        rgba(10, 31, 24, 0.82) 0%,
+        rgba(13, 59, 46, 0.75) 45%,
+        rgba(26, 92, 69, 0.7) 100%
+      );
+      z-index: 0;
+    }
+
+    .slide > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .bg-title {
+      background-image: url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1600&q=80');
+    }
+    .bg-problem {
+      background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600&q=80');
+    }
+    .bg-solution {
+      background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1600&q=80');
+    }
+    .bg-tech1 {
+      background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600&q=80');
+    }
+    .bg-tech2 {
+      background-image: url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1600&q=80');
+    }
+    .bg-tech3 {
+      background-image: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1600&q=80');
+    }
+    .bg-demo {
+      background-image: url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1600&q=80');
+    }
+    .bg-impact {
+      background-image: url('https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?w=1600&q=80');
+    }
+    .bg-end {
+      background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&q=80');
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 5vw, 3.6rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+      color: var(--white);
+      text-shadow: 0 2px 12px var(--shadow);
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.9rem, 3.8vw, 2.6rem);
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+      color: var(--accent-soft);
+      text-shadow: 0 2px 8px var(--shadow);
+    }
+
+    h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: rgba(248, 245, 240, 0.9);
+      margin-bottom: 0.4rem;
+    }
+
+    .tag {
+      display: inline-block;
+      background: rgba(244, 162, 97, 0.25);
+      border: 1px solid rgba(244, 162, 97, 0.5);
+      color: var(--accent-soft);
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.3rem 0.85rem;
+      border-radius: 999px;
+      margin-bottom: 1.25rem;
+      letter-spacing: 0.3px;
+    }
+
+    p, li {
+      font-size: 1.05rem;
+      line-height: 1.55;
+      color: rgba(248, 245, 240, 0.95);
+    }
+
+    .content-box {
+      max-width: 920px;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 14px;
+      padding: 1.35rem 1.5rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--accent-soft);
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .icon {
+      font-size: 1.4rem;
+    }
+
+    ul {
+      list-style: none;
+      margin-top: 0.5rem;
+    }
+
+    ul li {
+      position: relative;
+      padding-left: 1.35rem;
+      margin-bottom: 0.45rem;
+    }
+
+    ul li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .problem-list li {
+      margin-bottom: 0.7rem;
+    }
+
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .step {
+      flex: 1 1 180px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 12px;
+      padding: 1.1rem 1.2rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      background: var(--accent);
+      color: var(--green-dark);
+      font-weight: 700;
+      border-radius: 50%;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .step h4 {
+      font-size: 1rem;
+      color: var(--accent-soft);
+      margin-bottom: 0.35rem;
+    }
+
+    .step p {
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .impact-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.1rem;
+      margin-top: 0.5rem;
+    }
+
+    .impact-item {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 1.2rem;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .impact-item h4 {
+      font-size: 1.05rem;
+      color: var(--accent-soft);
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .impact-item p {
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+
+    .controls {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: var(--cream);
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.55rem 1.2rem;
+      border-radius: 999px;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn:hover {
+      background: rgba(244, 162, 97, 0.35);
+      border-color: var(--accent);
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .dots {
+      display: flex;
+      gap: 0.4rem;
+      margin: 0 0.5rem;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.35);
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .dot.active {
+      background: var(--accent);
+      transform: scale(1.25);
+    }
+
+    .title-center {
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .title-center h1 {
+      margin-bottom: 0.5rem;
+    }
+
+    .meta {
+      margin-top: 1.5rem;
+      font-size: 1.05rem;
+      color: rgba(248, 245, 240, 0.85);
+    }
+
+    .meta strong {
+      color: var(--accent-soft);
+    }
+
+    .hint {
+      position: fixed;
+      bottom: 1.6rem;
+      right: 1.5rem;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.45);
+      z-index: 90;
+    }
+
+    @media (max-width: 900px) {
+      .slide {
+        padding: 4rem 1.75rem 5rem;
+      }
+      .two-col, .impact-grid {
+        grid-template-columns: 1fr;
+      }
+      .flow {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="nav-bar">
+    <div class="logo">SMART MANGROVE EXPLORER</div>
+    <div class="slide-counter"><span id="current">1</span> / <span id="total">9</span></div>
+  </div>
+
+  <div class="presentation" id="presentation">
+
+    <!-- SLIDE 1: Title -->
+    <section class="slide active bg-title" data-slide="1">
+      <div class="title-center">
+        <span class="tag">Applied Tools & Technologies in Tourism</span>
+        <h1>SMART MANGROVE EXPLORER</h1>
+        <p class="subtitle">Mangrove Park, Panabo City, Davao del Norte</p>
+        <p class="meta">Tourist Journey Stage: <strong>EXPLORE</strong></p>
+        <p class="meta" style="margin-top: 2rem; font-size: 0.95rem; opacity: 0.85;">
+          Enhancing the visitor experience through integrated smart technologies
+        </p>
+      </div>
+    </section>
+
+    <!-- SLIDE 2: Tourism Problem -->
+    <section class="slide bg-problem" data-slide="2">
+      <div class="content-box">
+        <span class="tag">01 · Tourism Problem</span>
+        <h2>What Needs to Be Improved?</h2>
+        <div class="card" style="margin-top: 0.5rem;">
+          <p style="margin-bottom: 1rem;">
+            Mangrove Park in Panabo City has strong potential to offer an educational and enjoyable nature experience. However, two key issues currently limit its effectiveness:
+          </p>
+          <ul class="problem-list">
+            <li>
+              <strong>Unengaging visitor experience</strong> — Limited interactive ways for tourists to learn about the mangrove ecosystem, wildlife, and conservation practices.
+            </li>
+            <li>
+              <strong>Inefficient data collection</strong> — Traditional paper logbooks are slow, often incomplete, and make it difficult for managers to organize, analyze, and act on visitor data.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 3: Smart Solution Overview -->
+    <section class="slide bg-solution" data-slide="3">
+      <div class="content-box">
+        <span class="tag">02 · Smart Solution</span>
+        <h2>Three Integrated Technologies</h2>
+        <p style="margin-bottom: 1.5rem; max-width: 700px;">
+          We propose a connected system that digitizes registration, provides intelligent on-site guidance, and captures real-time feedback — all working together to transform the EXPLORE stage.
+        </p>
+        <div class="two-col">
+          <div class="card">
+            <div class="card-title"><span class="icon">🖥️</span> Digital Tourist Registration Kiosk</div>
+            <p>Touchscreen self-service at the entrance that replaces paper logbooks with structured digital data.</p>
+          </div>
+          <div class="card">
+            <div class="card-title"><span class="icon">🤖</span> AI-Powered Digital Tourist Guide</div>
+            <p>Interactive chatbot / digital assistant that answers questions and educates visitors in real time.</p>
+          </div>
+        </div>
+        <div class="card" style="margin-top: 1.1rem;">
+          <div class="card-title"><span class="icon">📱</span> Smart Visitor Feedback & Monitoring System</div>
+          <p>QR-based digital feedback after the visit, feeding ratings and comments directly into a management dashboard.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 4: Tech 1 - Kiosk -->
+    <section class="slide bg-tech1" data-slide="4">
+      <div class="content-box">
+        <span class="tag">Technology 1</span>
+        <h2>Digital Tourist Registration Kiosk</h2>
+        <p style="margin-bottom: 1.2rem;">
+          A touchscreen computer or tablet placed at the park entrance. Visitors register digitally before entering — no more handwritten logbooks.
+        </p>
+        <div class="card">
+          <h3>Data Collected</h3>
+          <ul>
+            <li>Name of visitor / group leader</li>
+            <li>Number of visitors in the party</li>
+            <li>Date and exact time of visit</li>
+            <li>Contact information (optional / for updates)</li>
+            <li>Purpose of visit (education, leisure, research, etc.)</li>
+          </ul>
+        </div>
+        <p style="margin-top: 1rem; font-size: 0.95rem; opacity: 0.9;">
+          Result: Faster entry, complete and searchable records, and immediate data available for tourism managers.
+        </p>
+      </div>
+    </section>
+
+    <!-- SLIDE 5: Tech 2 - AI Guide -->
+    <section class="slide bg-tech2" data-slide="5">
+      <div class="content-box">
+        <span class="tag">Technology 2</span>
+        <h2>AI-Powered Digital Tourist Guide</h2>
+        <p style="margin-bottom: 1.2rem;">
+          A digital assistant or chatbot (accessible via kiosk, mobile web, or on-site tablets) that helps tourists explore and learn about Mangrove Park.
+        </p>
+        <div class="two-col">
+          <div class="card">
+            <h3>What visitors can ask</h3>
+            <ul>
+              <li>Mangrove species identification & facts</li>
+              <li>History of the park</li>
+              <li>Wildlife & biodiversity highlights</li>
+              <li>Conservation practices</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Practical assistance</h3>
+            <ul>
+              <li>Activities and recommended spots</li>
+              <li>Safety rules and reminders</li>
+              <li>Directions to facilities</li>
+              <li>Trail tips and best times</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 6: Tech 3 - Feedback -->
+    <section class="slide bg-tech3" data-slide="6">
+      <div class="content-box">
+        <span class="tag">Technology 3</span>
+        <h2>Smart Visitor Feedback & Monitoring System</h2>
+        <p style="margin-bottom: 1.2rem;">
+          After exploring the park, visitors scan a QR code (or use a link on the kiosk) and submit feedback digitally in under a minute.
+        </p>
+        <div class="card">
+          <h3>Visitors can rate & comment on</h3>
+          <ul>
+            <li>Cleanliness of trails and facilities</li>
+            <li>Condition and availability of amenities</li>
+            <li>Perceived safety</li>
+            <li>Quality of information provided (signage + digital guide)</li>
+            <li>Overall experience</li>
+          </ul>
+        </div>
+        <p style="margin-top: 1rem; font-size: 0.95rem; opacity: 0.9;">
+          Managers receive real-time insights instead of delayed or incomplete paper forms, enabling faster response and continuous improvement.
+        </p>
+      </div>
+    </section>
+
+    <!-- SLIDE 7: Demonstration -->
+    <section class="slide bg-demo" data-slide="7">
+      <div class="content-box" style="max-width: 1000px;">
+        <span class="tag">03 · Demonstration</span>
+        <h2>How the Solution Works</h2>
+        <div class="flow">
+          <div class="step">
+            <div class="step-num">1</div>
+            <h4>Arrive & Register</h4>
+            <p>Visitor uses the Digital Kiosk at the entrance to enter details in under 60 seconds.</p>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <h4>Explore with AI</h4>
+            <p>During the visit, the AI Digital Guide answers questions about species, trails, safety, and more.</p>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <h4>Give Feedback</h4>
+            <p>At exit (or via phone), scan QR code and rate cleanliness, facilities, safety, and overall experience.</p>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <h4>Managers Act</h4>
+            <p>Dashboard aggregates registrations and feedback for better planning, staffing, and conservation decisions.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 8: Smart Impact -->
+    <section class="slide bg-impact" data-slide="8">
+      <div class="content-box" style="max-width: 1000px;">
+        <span class="tag">04 · Smart Impact</span>
+        <h2>How It Improves the Destination</h2>
+        <div class="impact-grid">
+          <div class="impact-item">
+            <h4>🎯 Visitor Experience</h4>
+            <p>Interactive, personalized learning makes the mangrove ecosystem more engaging and memorable.</p>
+          </div>
+          <div class="impact-item">
+            <h4>⚡ Efficiency</h4>
+            <p>Digital registration and feedback eliminate paper bottlenecks and speed up data handling.</p>
+          </div>
+          <div class="impact-item">
+            <h4>♿ Accessibility</h4>
+            <p>Multilingual AI guide and clear digital info support diverse visitors, including students and groups.</p>
+          </div>
+          <div class="impact-item">
+            <h4>🌱 Sustainability</h4>
+            <p>Better data helps manage carrying capacity and reinforces conservation messaging on-site.</p>
+          </div>
+          <div class="impact-item">
+            <h4>🛡️ Safety</h4>
+            <p>Instant reminders of rules, trail conditions, and emergency info reduce risks during exploration.</p>
+          </div>
+          <div class="impact-item">
+            <h4>📊 Destination Mgmt</h4>
+            <p>Real-time visitor insights enable evidence-based decisions for facilities, staffing, and promotion.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 9: Closing -->
+    <section class="slide bg-end" data-slide="9">
+      <div class="title-center">
+        <span class="tag">Thank You</span>
+        <h1>SMART MANGROVE EXPLORER</h1>
+        <p class="subtitle" style="margin-top: 0.75rem;">
+          Transforming the EXPLORE stage at Panabo Mangrove Forest Park
+        </p>
+        <div class="card" style="margin: 2rem auto 0; max-width: 560px; text-align: left;">
+          <p style="margin-bottom: 0.6rem;"><strong>Integrated technologies:</strong></p>
+          <ul>
+            <li>Digital Tourist Registration Kiosk</li>
+            <li>AI-Powered Digital Tourist Guide</li>
+            <li>Smart Visitor Feedback & Monitoring System</li>
+          </ul>
+        </div>
+        <p class="meta" style="margin-top: 2rem;">Questions & Discussion Welcome</p>
+      </div>
+    </section>
+  </div>
+
+  <div class="controls">
+    <button class="btn" id="prevBtn" disabled>← Prev</button>
+    <div class="dots" id="dots"></div>
+    <button class="btn" id="nextBtn">Next →</button>
+  </div>
+  <div class="hint">Use ← → arrow keys or click buttons</div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const total = slides.length;
+    let current = 0;
+
+    document.getElementById('total').textContent = total;
+
+    const dotsContainer = document.getElementById('dots');
+    for (let i = 0; i < total; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'dot' + (i === 0 ? ' active' : '');
+      dot.addEventListener('click', () => goTo(i));
+      dotsContainer.appendChild(dot);
+    }
+
+    function update() {
+      slides.forEach((s, i) => {
+        s.classList.toggle('active', i === current);
+      });
+      document.querySelectorAll('.dot').forEach((d, i) => {
+        d.classList.toggle('active', i === current);
+      });
+      document.getElementById('current').textContent = current + 1;
+      document.getElementById('prevBtn').disabled = current === 0;
+      document.getElementById('nextBtn').disabled = current === total - 1;
+    }
+
+    function goTo(index) {
+      if (index < 0 || index >= total) return;
+      current = index;
+      update();
+    }
+
+    document.getElementById('prevBtn').addEventListener('click', () => goTo(current - 1));
+    document.getElementById('nextBtn').addEventListener('click', () => goTo(current + 1));
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        goTo(current + 1);
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        goTo(current - 1);
+      }
+    });
+
+    update();
+  </script>
+</body>
+</html>
